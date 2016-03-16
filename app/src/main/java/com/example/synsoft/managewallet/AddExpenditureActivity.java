@@ -1,5 +1,6 @@
 package com.example.synsoft.managewallet;
 
+import android.app.DatePickerDialog;
 import android.app.DialogFragment;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -13,36 +14,41 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.synsoft.managewallet.dialog.CategoryDialog;
 import com.example.synsoft.managewallet.model.Category;
 import com.example.synsoft.managewallet.model.ExpenditureType;
 import com.example.synsoft.managewallet.util.Utility;
 
+import java.util.Calendar;
 import java.util.List;
 
 public class AddExpenditureActivity extends AppCompatActivity implements  View.OnClickListener,CategoryDialog.NoticeDialogListener{
 
     EditText editText_value;
     EditText editText_note;
-    Button button_select_date;
-    Button button_select_category;
-    Button button_save;
+    TextView button_select_date;
+    TextView button_select_category;
+    TextView button_save;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_expenditure);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        button_select_category=(Button)this.findViewById(R.id.select_category);
+        button_select_category=(TextView)this.findViewById(R.id.select_category);
         button_select_category.setOnClickListener(this);
-
-
-
+        button_select_date=(TextView)this.findViewById(R.id.select_date);
+        button_select_date.setOnClickListener(this);
+        button_save=(TextView)this.findViewById(R.id.save_entries);
+        button_save.setOnClickListener(this);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -52,7 +58,7 @@ public class AddExpenditureActivity extends AppCompatActivity implements  View.O
                //addCurrency();
                 //getCurrencies();
                // addCategories();
-                showExpenditure();
+               //showExpenditure();
             }
         });
     }
@@ -92,6 +98,7 @@ public class AddExpenditureActivity extends AppCompatActivity implements  View.O
     switch (v.getId())
     {
         case R.id.select_date:
+            showDatePicker();
             break;
         case  R.id.select_category:
             showNoticeDialog();
@@ -106,7 +113,7 @@ public class AddExpenditureActivity extends AppCompatActivity implements  View.O
         // Create an instance of the dialog fragment and show it
         //DialogFragment dialog = new CategoryDialog();
         //dialog.show(getFragmentManager(), "NoticeDialogFragment");
-        AlertDialog.Builder builder=new AlertDialog.Builder(AddExpenditureActivity.this);
+        final AlertDialog.Builder builder=new AlertDialog.Builder(AddExpenditureActivity.this);
         builder.setTitle("Categories");
 
         LayoutInflater inflater = this.getLayoutInflater();
@@ -122,7 +129,14 @@ public class AddExpenditureActivity extends AppCompatActivity implements  View.O
 
         tabLayout.addTab(tabLayout.newTab().setText("Expense"));
         tabLayout.addTab(tabLayout.newTab().setText("Income"));
-
+        final AlertDialog alertDialog=builder.create();
+  listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+      @Override
+      public void onItemClick(AdapterView<?> adapterView, View view, int i, long l)
+      {
+      alertDialog.dismiss();
+      }
+  });
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -137,7 +151,7 @@ public class AddExpenditureActivity extends AppCompatActivity implements  View.O
 
                     case 1:
                         arrayAdapter=new ArrayAdapter<String>(AddExpenditureActivity.this,
-                                android.R.layout.simple_list_item_1, android.R.id.text1, content1);
+                                android.R.layout.simple_list_item_1, android.R.id.text1, content2);
                         break;
                 }
                 listView.setAdapter(arrayAdapter);
@@ -154,6 +168,7 @@ public class AddExpenditureActivity extends AppCompatActivity implements  View.O
             }
         });
 
+        alertDialog.show();
 
     }
 
@@ -165,5 +180,21 @@ public class AddExpenditureActivity extends AppCompatActivity implements  View.O
     @Override
     public void onDialogNegativeClick(DialogFragment dialog) {
 
+    }
+
+    public void showDatePicker()
+    {
+        Calendar mcurrentDate=Calendar.getInstance();
+        int mYear=mcurrentDate.get(Calendar.YEAR);
+       int mMonth=mcurrentDate.get(Calendar.MONTH);
+      final int  mDay=mcurrentDate.get(Calendar.DAY_OF_MONTH);
+
+        final DatePickerDialog mDatePicker=new DatePickerDialog(AddExpenditureActivity.this, new DatePickerDialog.OnDateSetListener() {
+        public void onDateSet(DatePicker datepicker, int selectedyear, int selectedmonth, int selectedday) {
+            //mDatePicker.dismiss();
+        }
+    },mYear, mMonth, mDay);
+        mDatePicker.setTitle("SELECT DATE");
+        mDatePicker.show();
     }
 }

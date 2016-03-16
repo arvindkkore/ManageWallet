@@ -221,4 +221,8 @@ public class IncomeExpense {
         myDao.refresh(this);
     }
 
+    @Override
+    public String toString() {
+        return ""+getValue()+" "+getNote();
+    }
 }
