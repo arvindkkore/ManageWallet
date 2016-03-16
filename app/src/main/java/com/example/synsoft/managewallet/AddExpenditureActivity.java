@@ -186,12 +186,11 @@ public class AddExpenditureActivity extends AppCompatActivity implements  View.O
     {
         Calendar mcurrentDate=Calendar.getInstance();
         int mYear=mcurrentDate.get(Calendar.YEAR);
-       int mMonth=mcurrentDate.get(Calendar.MONTH);
-      final int  mDay=mcurrentDate.get(Calendar.DAY_OF_MONTH);
-
+        int mMonth=mcurrentDate.get(Calendar.MONTH);
+        final int  mDay=mcurrentDate.get(Calendar.DAY_OF_MONTH);
         final DatePickerDialog mDatePicker=new DatePickerDialog(AddExpenditureActivity.this, new DatePickerDialog.OnDateSetListener() {
         public void onDateSet(DatePicker datepicker, int selectedyear, int selectedmonth, int selectedday) {
-            //mDatePicker.dismiss();
+            button_select_date.setText(" "+selectedday+"/"+selectedmonth+"/"+selectedyear);
         }
     },mYear, mMonth, mDay);
         mDatePicker.setTitle("SELECT DATE");
