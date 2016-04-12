@@ -4,9 +4,19 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.example.synsoft.managewallet.adapter.CustomRecAdapter;
+import com.example.synsoft.managewallet.model.ExpenditureType;
+import com.example.synsoft.managewallet.model.IncomeExpense;
+import com.example.synsoft.managewallet.util.Utility;
+
+import java.util.List;
 
 
 /**
@@ -18,6 +28,10 @@ import android.view.ViewGroup;
  * create an instance of this fragment.
  */
 public class ListofEntries extends Fragment {
+
+    RecyclerView recyclerView=null;
+   List<IncomeExpense> incomeExpenses=null;
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -27,7 +41,7 @@ public class ListofEntries extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    private OnFragmentInteractionListener mListener;
+  //  private OnFragmentInteractionListener mListener;
 
     public ListofEntries() {
         // Required empty public constructor
@@ -64,31 +78,51 @@ public class ListofEntries extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_listof_entries, container, false);
+        View rootView=inflater.inflate(R.layout.fragment_listof_entries, container, false);
+        recyclerView= (RecyclerView) rootView.findViewById(R.id.listOfEntry);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
+        recyclerView.setLayoutManager(mLayoutManager);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                incomeExpenses=getIncomeExpenses();
+                getActivity().runOnUiThread(new Runnable(){
+                    public void run()
+                    {
+                    CustomRecAdapter customRecAdapter=new CustomRecAdapter(incomeExpenses);
+                        recyclerView.setAdapter(customRecAdapter);
+
+                    }
+                });
+
+            }
+
+            }).start();
+        return rootView;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
+      /*  if (mListener != null) {
             mListener.onFragmentInteraction(uri);
-        }
+        }*/
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
+       /* if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
-        }
+        }*/
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
+      //  mListener = null;
     }
 
     /**
@@ -101,8 +135,15 @@ public class ListofEntries extends Fragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnFragmentInteractionListener {
+   /* public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }*/
+    public  List<IncomeExpense> getIncomeExpenses()
+    {
+        List<IncomeExpense> incomeExpenses=Utility.getIntance().getIncomeExpenses((MyApplication)(getActivity().getApplicationContext()),1);
+
+           // Log.e("test",""+((IncomeExpense)Utility.getIntance().getIncomeExpenses((MyApplication)(getActivity().getApplicationContext()),1));
+       return  incomeExpenses;
     }
 }

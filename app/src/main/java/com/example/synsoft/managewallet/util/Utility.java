@@ -56,6 +56,7 @@ public  class Utility
         expenditureTypeDao.insert(expenditureType1);
   }
 
+
     public  List getExpenditureType(MyApplication application)
     {
 
@@ -67,7 +68,28 @@ public  class Utility
        return expenditures;
 
     }
+    public  List<Category> getCategories(MyApplication application,int expenditureType)
+    {
 
+        DaoSession daoSession = application.getDaoSession();
+        CategoryDao categoryDao=daoSession.getCategoryDao();
+        List <Category> expenditures = categoryDao.queryBuilder().where(
+                CategoryDao.Properties.ExpenditureId.eq(expenditureType)).orderAsc(CategoryDao.Properties.Id)
+                .list();
+
+        return expenditures;
+
+    }
+
+    public  List getIncomeExpenses(MyApplication application,int expenditure_type)
+    {
+
+        DaoSession daoSession = application.getDaoSession();
+        IncomeExpenseDao incomeExpenseDao=daoSession.getIncomeExpenseDao();
+        List incomeExpensesList = incomeExpenseDao.queryBuilder().orderAsc(IncomeExpenseDao.Properties.Id).list();
+        return incomeExpensesList;
+
+    }
     public  void addCategories(MyApplication application,int expenditure_type)
     {
 
@@ -100,8 +122,9 @@ public  class Utility
             category.setExpenditureType(expenditureTypeObj);
             category.setExpenditureId(expenditureTypeObj.getId());
             List<Category> list = expenditureTypeObj.getCategories();
-            categoryDao.insert(category);
             list.add(category);
+            categoryDao.insert(category);
+
         }
 
     }

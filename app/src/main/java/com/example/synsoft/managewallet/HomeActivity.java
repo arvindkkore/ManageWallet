@@ -1,9 +1,13 @@
 package com.example.synsoft.managewallet;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
+
+
+import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -14,21 +18,38 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.synsoft.managewallet.adapter.PagerAdapter;
+import com.example.synsoft.managewallet.adapter.ViewPagerAdapter;
+
 public class HomeActivity extends AppCompatActivity{
 
     TabLayout tabLayout=null;
+    ViewPager pager=null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        tabLayout= (TabLayout) findViewById(R.id.tabs);
-        tabLayout.addTab(tabLayout.newTab().setText("OVERVIEW"));
-        tabLayout.addTab(tabLayout.newTab().setText("ENTRY"));
-        tabLayout.addTab(tabLayout.newTab().setText("MONTHWISE"));
 
-//
+        tabLayout= (TabLayout) findViewById(R.id.tabs);
+      //  tabLayout.addTab(tabLayout.newTab().setText("OVERVIEW"));
+      //  tabLayout.addTab(tabLayout.newTab().setText("ENTRY"));
+     //   tabLayout.addTab(tabLayout.newTab().setText("MONTHWISE"));
+        pager= (ViewPager) findViewById(R.id.pager);
+        setupViewPager(pager);
+        tabLayout.setupWithViewPager(pager);
+
+
+
+    }
+
+    private void setupViewPager(ViewPager viewPager) {
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        adapter.addFragment(new OverViewFragment(), "OVERVIEW");
+        adapter.addFragment(new ListofEntries(), "ENTRY");
+        adapter.addFragment(new MonthWiseFragment(), "MONTHWISE");
+        viewPager.setAdapter(adapter);
     }
 //        fab.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -57,27 +78,50 @@ public class HomeActivity extends AppCompatActivity{
 //        }
 //    }
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        // Inflate the menu; this adds items to the action bar if it is present.
-//        getMenuInflater().inflate(R.menu.home, menu);
-//        return true;
-//    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.home, menu);
+        return true;
+    }
 
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        // Handle action bar item clicks here. The action bar will
-//        // automatically handle clicks on the Home/Up button, so long
-//        // as you specify a parent activity in AndroidManifest.xml.
-//        int id = item.getItemId();
-//
-//        //noinspection SimplifiableIfStatement
-//        if (id == R.id.action_settings) {
-//            return true;
-//        }
-//
-//        return super.onOptionsItemSelected(item);
-//    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            Intent intent=new Intent(HomeActivity.this,SettingActivity.class);
+            startActivity(intent);
+
+            return true;
+        }
+        if (id == R.id.action_add) {
+            Intent intent=new Intent(HomeActivity.this,AddExpenditureActivity.class);
+            startActivity(intent);
+            return true;
+        }
+        if (id == R.id.action_add_currency) {
+            Intent intent=new Intent(HomeActivity.this,CurrencyActivity.class);
+            startActivity(intent);
+            return true;
+        }
+        if (id == R.id.action_add_categories) {
+            Intent intent=new Intent(HomeActivity.this,AddCategoryActivity.class);
+            startActivity(intent);
+            return true;
+        }
+        if (id == R.id.action_add_expindituretype) {
+            Intent intent=new Intent(HomeActivity.this,AddExpenditureTypeActivity.class);
+            startActivity(intent);
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 
 //    @SuppressWarnings("StatementWithEmptyBody")
 //    @Override

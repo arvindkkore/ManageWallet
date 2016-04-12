@@ -27,6 +27,7 @@ import com.example.synsoft.managewallet.model.Category;
 import com.example.synsoft.managewallet.model.ExpenditureType;
 import com.example.synsoft.managewallet.util.Utility;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -121,37 +122,63 @@ public class AddExpenditureActivity extends AppCompatActivity implements  View.O
         builder.setView(view);
         final String[] content1={"Cloth","Rent","Grocery"};
         final String[] content2={"Salary","Room Rent"};
+
         final TabLayout tabLayout=(TabLayout) view.findViewById(R.id.tabs);
         final ListView listView=(ListView) view.findViewById(R.id.expense_expenditure_type);
-        ArrayAdapter<String>  arrayAdapter=new ArrayAdapter<String>(AddExpenditureActivity.this,
-                android.R.layout.simple_list_item_1, android.R.id.text1, content1);
-        listView.setAdapter(arrayAdapter);
-
+//        ArrayAdapter<String>  arrayAdapter=new ArrayAdapter<String>(AddExpenditureActivity.this,
+//                android.R.layout.simple_list_item_1, android.R.id.text1, content1);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                final List<Category> categories=getCategories(1);
+                ArrayAdapter<Category> arrayAdapter=new ArrayAdapter<Category>(AddExpenditureActivity.this,
+                        android.R.layout.simple_list_item_1, android.R.id.text1, categories);
+                listView.setAdapter(arrayAdapter);
+            }
+        });
+        //listView.setAdapter(arrayAdapter);
         tabLayout.addTab(tabLayout.newTab().setText("Expense"));
         tabLayout.addTab(tabLayout.newTab().setText("Income"));
         final AlertDialog alertDialog=builder.create();
-  listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
       @Override
       public void onItemClick(AdapterView<?> adapterView, View view, int i, long l)
       {
-      alertDialog.dismiss();
+        alertDialog.dismiss();
       }
   });
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
-            public void onTabSelected(TabLayout.Tab tab) {
+            public void onTabSelected(TabLayout.Tab tab)
+            {
                 ArrayAdapter<String> arrayAdapter=null;
                 switch (tab.getPosition())
                 {
                     case 0:
-                        arrayAdapter=new ArrayAdapter<String>(AddExpenditureActivity.this,
-                                android.R.layout.simple_list_item_1, android.R.id.text1, content1);
-                        listView.setAdapter(arrayAdapter);
+
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                final List<Category> categories=getCategories(1);
+                                ArrayAdapter<Category> arrayAdapter=new ArrayAdapter<Category>(AddExpenditureActivity.this,
+                                        android.R.layout.simple_list_item_1, android.R.id.text1, categories);
+                                listView.setAdapter(arrayAdapter);
+                            }
+                        });
                         break;
 
                     case 1:
-                        arrayAdapter=new ArrayAdapter<String>(AddExpenditureActivity.this,
-                                android.R.layout.simple_list_item_1, android.R.id.text1, content2);
+
+
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                final List<Category> categories=getCategories(2);
+                               ArrayAdapter<Category> arrayAdapter=new ArrayAdapter<Category>(AddExpenditureActivity.this,
+                                        android.R.layout.simple_list_item_1, android.R.id.text1, categories);
+                                listView.setAdapter(arrayAdapter);
+                            }
+                        });
                         break;
                 }
                 listView.setAdapter(arrayAdapter);
@@ -196,4 +223,11 @@ public class AddExpenditureActivity extends AppCompatActivity implements  View.O
         mDatePicker.setTitle("SELECT DATE");
         mDatePicker.show();
     }
+    public List<Category> getCategories(int expenditureType)
+    {
+       List<Category> categories=Utility.getIntance().getCategories((MyApplication)getApplicationContext(),expenditureType);
+       System.out.println("getCategories(int expenditureType) "+categories);
+        return  categories;
+    }
+
 }

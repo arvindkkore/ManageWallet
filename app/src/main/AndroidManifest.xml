@@ -15,18 +15,29 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
         <activity
             android:name=".AddExpenditureActivity"
             android:label="@string/title_activity_add_expenditure"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".AddCategoryActivity"
             android:label="@string/title_activity_add_category"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".SettingActivity"
+            android:label="@string/title_activity_setting"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".CurrencyActivity"
+            android:label="@string/title_activity_currency"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".AddExpenditureTypeActivity"
+            android:label="@string/title_activity_add_expenditure_type"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

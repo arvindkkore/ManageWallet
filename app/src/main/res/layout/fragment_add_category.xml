@@ -14,13 +14,14 @@
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/editText" android:hint="category name"
+        android:id="@+id/editText_category_name" android:hint="category name"
         android:layout_gravity="center_horizontal"/>
     <RadioGroup
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:orientation="horizontal"
+        android:id="@+id/expense_group"
         android:layout_gravity="center_horizontal"
 
         >
@@ -28,13 +29,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Expense"
-            android:id="@+id/radia_expense" />
+            android:id="@+id/radio_expense" />
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Income"
 
-            android:id="@+id/radia_income" />
+            android:id="@+id/radio_income" />
 
     </RadioGroup>
 
